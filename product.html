@@ -1,0 +1,893 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Padscha | Product Detail</title>
+  <meta name="theme-color" content="#faf7f2" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Trirong:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="products.js"></script>
+  <style>
+    /* ── Detail page header ── */
+    .detail-header {
+      background: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 clamp(20px, 5vw, 60px);
+      height: 72px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .detail-back {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.75);
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-back:hover { color: #fff; }
+
+    .detail-logo-img {
+      height: 44px;
+      width: auto;
+      background: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .detail-lang-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .detail-lang-btn {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.6);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 2px;
+      transition: color 0.2s;
+    }
+
+    .detail-lang-btn.active,
+    .detail-lang-btn:hover { color: #fff; }
+
+    /* ── Main layout ── */
+    .detail-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px clamp(20px, 5vw, 60px) 100px;
+    }
+
+    /* Breadcrumb */
+    .detail-breadcrumb {
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      color: var(--muted);
+      margin-bottom: 40px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .detail-breadcrumb a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .detail-breadcrumb a:hover { color: var(--ink); }
+
+    /* Two-column layout */
+    .detail-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: start;
+    }
+
+    /* Media */
+    .detail-media {
+      position: sticky;
+      top: 100px;
+    }
+
+    .detail-media-wrap {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #f5f0ea;
+      aspect-ratio: 1 / 1;
+    }
+
+    .detail-media-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .detail-status-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      font-family: var(--font-sans);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 5px 14px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    /* Copy */
+    .detail-copy { }
+
+    .detail-sku {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--gold-accent);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .detail-title {
+      font-family: var(--font-serif);
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 20px;
+    }
+
+    .detail-story {
+      font-size: 0.95rem;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 32px;
+      border-left: 2px solid var(--line-medium);
+      padding-left: 16px;
+    }
+
+    /* Specs grid */
+    .detail-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--line-light);
+      margin-bottom: 32px;
+    }
+
+    .spec-row {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line-light);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .spec-row:nth-child(odd) {
+      padding-right: 24px;
+    }
+
+    .spec-row:nth-child(even) {
+      padding-left: 24px;
+      border-left: 1px solid var(--line-light);
+    }
+
+    .spec-label {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .spec-value {
+      font-family: var(--font-serif);
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+
+    .spec-price .spec-value {
+      font-family: var(--font-sans);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--rose-accent);
+    }
+
+    /* CTA */
+    .detail-cta {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .btn-detail-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--ink);
+      color: #fff;
+      padding: 16px 32px;
+      border-radius: 40px;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn-detail-line:hover { opacity: 0.82; }
+
+    .btn-detail-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--muted);
+      padding: 14px 32px;
+      border-radius: 40px;
+      border: 1px solid var(--line-medium);
+      font-family: var(--font-sans);
+      font-size: 0.82rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .btn-detail-back:hover {
+      color: var(--ink);
+      border-color: var(--ink);
+    }
+
+    /* Tags row */
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .detail-tag {
+      font-family: var(--font-sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--gold-accent);
+      border: 1px solid rgba(156, 122, 82, 0.35);
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── Image zoom hint ── */
+    .detail-media-wrap {
+      cursor: zoom-in;
+    }
+
+    .detail-media-wrap::after {
+      content: '⤢';
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+      background: rgba(28, 24, 20, 0.55);
+      color: #fff;
+      font-size: 1rem;
+      line-height: 32px;
+      text-align: center;
+      border-radius: 6px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .detail-media-wrap:hover::after {
+      opacity: 1;
+    }
+
+    /* ── Lightbox overlay ── */
+    #imgLightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9000;
+      background: rgba(10, 8, 6, 0.92);
+      cursor: zoom-out;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #imgLightbox.open {
+      display: flex;
+    }
+
+    #imgLightbox img {
+      max-width: min(90vw, 900px);
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+      pointer-events: auto;
+      user-select: none;
+      animation: lbIn 0.22s ease;
+    }
+
+    #imgLightboxClose {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+
+    #imgLightboxClose:hover { color: #fff; }
+
+    @keyframes lbIn {
+      from { opacity: 0; transform: scale(0.94); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Error state */
+    .detail-error {
+      text-align: center;
+      padding: 120px 20px;
+    }
+
+    .detail-error h2 {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .detail-layout {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .detail-media {
+        position: static;
+      }
+
+      .detail-specs {
+        grid-template-columns: 1fr;
+      }
+
+      .spec-row:nth-child(odd) {
+        padding-right: 0;
+      }
+
+      .spec-row:nth-child(even) {
+        padding-left: 0;
+        border-left: none;
+      }
+
+      .detail-main {
+        padding: 32px 18px 72px;
+      }
+
+      .detail-breadcrumb {
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+
+      .detail-header {
+        padding: 0 16px;
+        height: 64px;
+        gap: 10px;
+      }
+
+      .detail-logo-img { height: 38px; }
+
+      .detail-story {
+        font-size: 0.92rem;
+        margin-bottom: 28px;
+      }
+
+      .spec-price .spec-value { font-size: 1.35rem; }
+
+      /* Larger tap targets for buttons on touch screens */
+      .btn-detail-line,
+      .btn-detail-back {
+        padding: 15px 24px;
+      }
+
+      .detail-media-wrap::after { opacity: 1; }
+    }
+
+    /* Small phones */
+    @media (max-width: 480px) {
+      .detail-header {
+        padding: 0 12px;
+        height: 60px;
+        gap: 8px;
+      }
+
+      /* Hide the long back label, keep the arrow as a compact back control */
+      .detail-back #backLabel { display: none; }
+
+      .detail-logo-img {
+        height: 34px;
+        padding: 5px 9px;
+      }
+
+      .detail-lang-row { gap: 4px; }
+
+      .detail-lang-btn { font-size: 0.7rem; padding: 6px 3px; }
+
+      #currencySelect { font-size: 0.68rem !important; padding: 4px 5px !important; }
+
+      .detail-main { padding: 26px 14px 64px; }
+
+      .detail-title { margin-bottom: 16px; }
+
+      .detail-sku { font-size: 0.68rem; letter-spacing: 0.14em; }
+
+      .detail-tags { margin-bottom: 22px; }
+
+      /* Make social buttons comfortable to tap */
+      .detail-cta .social-icon-btn {
+        width: 46px;
+        height: 46px;
+      }
+
+      #imgLightboxClose {
+        top: 12px;
+        right: 14px;
+        font-size: 2.4rem;
+        padding: 8px 12px;
+      }
+
+      #imgLightbox img { max-width: 94vw; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header -->
+  <header class="detail-header">
+    <a href="collection.html" class="detail-back" id="backLink">
+      ← <span id="backLabel">คอลเลกชัน</span>
+    </a>
+    <a href="index.html">
+      <img src="cbe8af98-e6ec-4e5f-95b6-90097d7f90b6.jpg" alt="PADSCHA" class="detail-logo-img" />
+    </a>
+    <div class="detail-lang-row">
+      <button class="detail-lang-btn active" data-lang="th">TH</button>
+      <button class="detail-lang-btn" data-lang="en">EN</button>
+      <select id="currencySelect" class="currency-select" style="margin-left:6px;background:rgba(0,0,0,0.25);color:#fff;border:1px solid rgba(255,255,255,0.3);font-size:0.72rem;padding:4px 8px;border-radius:4px;">
+        <option value="THB">฿ THB</option>
+        <option value="USD">$ USD</option>
+        <option value="EUR">€ EUR</option>
+      </select>
+    </div>
+  </header>
+
+  <!-- Lightbox -->
+  <div id="imgLightbox" role="dialog" aria-modal="true" aria-label="Zoomed image">
+    <button id="imgLightboxClose" aria-label="Close">×</button>
+    <img id="imgLightboxImg" src="" alt="" />
+  </div>
+
+  <main class="detail-main" id="detailMain">
+    <div class="detail-error" id="loadingState">
+      <p style="color:var(--muted);font-size:0.9rem;">กำลังโหลด...</p>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const products = window.PADSCHA_PRODUCTS || [];
+      const contact = window.PADSCHA_CONTACT || {};
+
+      let lang = localStorage.getItem('padscha-lang') || 'th';
+      let currency = localStorage.getItem('padscha-currency') || 'THB';
+
+      const rates = { THB: 1, USD: 35, EUR: 38 };
+      const symbols = { THB: 'THB', USD: 'USD', EUR: 'EUR' };
+
+      function formatPrice(value) {
+        if (value === null || value === undefined)
+          return lang === 'th' ? 'สอบถามราคา' : 'Price on request';
+        const converted = Math.round(value / rates[currency]);
+        return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(converted) + ' ' + symbols[currency];
+      }
+
+      const statusLabels = {
+        th: { Available: 'พร้อมจำหน่าย', Reserved: 'ปิดจอง', Sold: 'จำหน่ายแล้ว' },
+        en: { Available: 'AVAILABLE', Reserved: 'RESERVED', Sold: 'SOLD' },
+      };
+
+      function getStatusLabel(status) {
+        return statusLabels[lang]?.[status] || status;
+      }
+
+      const ui = {
+        th: {
+          back: 'คอลเลกชัน',
+          home: 'หน้าแรก',
+          sku: 'รหัสพลอย',
+          status: 'สถานะ',
+          price: 'ราคา',
+          carat: 'น้ำหนัก',
+          size: 'ขนาด',
+          color: 'โทนสี',
+          cut: 'รูปทรง',
+          origin: 'แหล่งกำเนิด',
+          treatment: 'การเผา',
+          cert: 'ใบเซอร์',
+          lineBtn: 'สอบถามผ่าน LINE',
+          backBtn: 'กลับคอลเลกชัน',
+          notFound: 'ไม่พบสินค้า',
+          notFoundSub: 'ไม่พบรายการที่คุณกำลังหา',
+        },
+        en: {
+          back: 'Collection',
+          home: 'Home',
+          sku: 'SKU',
+          status: 'Status',
+          price: 'Price',
+          carat: 'Carat',
+          size: 'Size',
+          color: 'Color',
+          cut: 'Cut',
+          origin: 'Origin',
+          treatment: 'Treatment',
+          cert: 'Certificate',
+          lineBtn: 'Inquire via LINE',
+          backBtn: 'Back to Collection',
+          notFound: 'Product not found',
+          notFoundSub: 'The listing you are looking for could not be found.',
+        },
+      };
+
+      function t(key) { return ui[lang]?.[key] ?? ui.en[key] ?? key; }
+
+      function getSlug() {
+        return new URLSearchParams(window.location.search).get('slug');
+      }
+
+      function lineUrl(product) {
+        const msg = lang === 'th'
+          ? `สวัสดีครับ/ค่ะ สนใจ ${product.name} (${product.sku}) รบกวนขอรูป วิดีโอ ใบเซอร์ และข้อมูลการเผาเพิ่มเติมครับ/ค่ะ`
+          : `Hello, I'm interested in ${product.name} (${product.sku}). Please share photos, videos, certificate and treatment details.`;
+        return `${contact.line}`;
+      }
+
+      function render(product) {
+        const title = lang === 'th' ? (product.thaiName || product.name) : product.name;
+        const story = lang === 'th' ? product.story : (product.storyEn || product.story);
+        const colorVal = lang === 'th' ? (product.colorTh || product.color) : product.color;
+        const cutVal = lang === 'th' ? (product.cutTh || product.cut) : product.cut;
+        const originVal = lang === 'th' ? (product.originTh || product.origin) : product.origin;
+        const treatmentVal = lang === 'th' ? (product.treatmentTh || product.treatment) : product.treatment;
+        const certVal = lang === 'th' ? (product.certificateTh || product.certificate) : product.certificate;
+        const tags = (product.tags || []).map(tag => `<span class="detail-tag">${tag}</span>`).join('');
+
+        document.title = `Padscha | ${title}`;
+
+        document.getElementById('backLabel').textContent = t('back');
+
+        document.getElementById('detailMain').innerHTML = `
+          <nav class="detail-breadcrumb">
+            <a href="index.html">${t('home')}</a>
+            <span>›</span>
+            <a href="collection.html">${t('back')}</a>
+            <span>›</span>
+            <span>${title}</span>
+          </nav>
+
+          <div class="detail-layout">
+            <div class="detail-media">
+              <div class="detail-media-wrap">
+                <img src="${product.image}" alt="${product.name}" />
+                <span class="detail-status-badge status-${product.status}">${getStatusLabel(product.status)}</span>
+              </div>
+            </div>
+
+            <div class="detail-copy">
+              <p class="detail-sku">${product.sku}</p>
+              <h1 class="detail-title">${title}</h1>
+
+              ${tags ? `<div class="detail-tags">${tags}</div>` : ''}
+
+              <p class="detail-story">${story}</p>
+
+              <div class="detail-specs">
+                <div class="spec-row spec-price">
+                  <span class="spec-label">${t('price')}</span>
+                  <span class="spec-value">${formatPrice(product.price)}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('status')}</span>
+                  <span class="spec-value">${getStatusLabel(product.status)}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('carat')}</span>
+                  <span class="spec-value">${product.carat}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('cut')}</span>
+                  <span class="spec-value">${cutVal}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('color')}</span>
+                  <span class="spec-value">${colorVal}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('origin')}</span>
+                  <span class="spec-value">${originVal}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('treatment')}</span>
+                  <span class="spec-value">${treatmentVal}</span>
+                </div>
+                <div class="spec-row">
+                  <span class="spec-label">${t('cert')}</span>
+                  <span class="spec-value">${certVal}</span>
+                </div>
+              </div>
+
+              <div class="detail-cta">
+                <p style="font-family:var(--font-sans);font-size:0.75rem;font-weight:600;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">${lang === 'th' ? 'ติดต่อสอบถาม' : 'Contact us'}</p>
+                <div style="display:flex;gap:12px;margin-bottom:16px;">
+                  <a class="social-icon-btn line" href="${contact.line}" target="_blank" rel="noreferrer" aria-label="LINE">
+                    <i class="fa-brands fa-line"></i>
+                  </a>
+                  <a class="social-icon-btn facebook" href="${contact.facebook || '#'}" target="_blank" rel="noreferrer" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook"></i>
+                  </a>
+                  <a class="social-icon-btn instagram" href="${contact.instagram || '#'}" target="_blank" rel="noreferrer" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                  </a>
+                  <a class="social-icon-btn tiktok" href="${contact.tiktok || '#'}" target="_blank" rel="noreferrer" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                  </a>
+                </div>
+                <a class="btn-detail-back" href="collection.html">
+                  ← ${t('backBtn')}
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      function renderError() {
+        document.getElementById('detailMain').innerHTML = `
+          <div class="detail-error">
+            <h2>${t('notFound')}</h2>
+            <p style="color:var(--muted);margin-bottom:32px">${t('notFoundSub')}</p>
+            <a class="btn-detail-back" href="collection.html" style="display:inline-flex">← ${t('backBtn')}</a>
+          </div>
+        `;
+      }
+
+      function applyLang(newLang) {
+        lang = newLang;
+        localStorage.setItem('padscha-lang', lang);
+        document.documentElement.lang = lang;
+        document.querySelectorAll('.detail-lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        const slug = getSlug();
+        const product = products.find(p => p.slug === slug);
+        if (product) render(product); else renderError();
+      }
+
+      // Language buttons
+      document.querySelectorAll('.detail-lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+        btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+      });
+
+      // Currency select
+      const currencySelect = document.getElementById('currencySelect');
+      if (currencySelect) {
+        currencySelect.value = currency;
+        currencySelect.addEventListener('change', () => {
+          currency = currencySelect.value;
+          localStorage.setItem('padscha-currency', currency);
+          const slug = getSlug();
+          const product = products.find(p => p.slug === slug);
+          if (product) render(product); else renderError();
+        });
+      }
+
+      // Render
+      const slug = getSlug();
+      const product = products.find(p => p.slug === slug);
+      if (product) render(product); else renderError();
+
+      // Image lightbox with zoom + pan
+      const lightbox = document.getElementById('imgLightbox');
+      const lbImg    = document.getElementById('imgLightboxImg');
+      const lbClose  = document.getElementById('imgLightboxClose');
+
+      let scale = 1, tx = 0, ty = 0;
+      let dragging = false, lastX = 0, lastY = 0;
+      let pinchDist0 = 0, pinchScale0 = 1;
+
+      const MIN_SCALE = 1, MAX_SCALE = 8;
+
+      function applyTransform(animate) {
+        if (animate) lbImg.style.transition = 'transform 0.15s ease';
+        else lbImg.style.transition = 'none';
+        lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+        lightbox.style.cursor = scale > 1 ? (dragging ? 'grabbing' : 'grab') : 'zoom-out';
+      }
+
+      function clampTranslate() {
+        const rect = lbImg.getBoundingClientRect();
+        const lbW = lightbox.clientWidth, lbH = lightbox.clientHeight;
+        const maxTx = Math.max(0, (rect.width  - lbW) / 2);
+        const maxTy = Math.max(0, (rect.height - lbH) / 2);
+        tx = Math.max(-maxTx, Math.min(maxTx, tx));
+        ty = Math.max(-maxTy, Math.min(maxTy, ty));
+      }
+
+      function resetZoom(animate) {
+        scale = 1; tx = 0; ty = 0;
+        applyTransform(animate);
+      }
+
+      function openLightbox(src) {
+        lbImg.src = src;
+        resetZoom(false);
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        lbImg.src = '';
+        resetZoom(false);
+      }
+
+      // Open on product image click
+      document.getElementById('detailMain').addEventListener('click', (e) => {
+        const wrap = e.target.closest('.detail-media-wrap');
+        if (!wrap) return;
+        const src = wrap.querySelector('img')?.src;
+        if (src) openLightbox(src);
+      });
+
+      // Close button
+      lbClose.addEventListener('click', (e) => { e.stopPropagation(); closeLightbox(); });
+
+      // Click backdrop to close (only when not dragged)
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox && scale <= 1) closeLightbox();
+      });
+
+      // Double-click image to reset zoom
+      lbImg.addEventListener('dblclick', () => resetZoom(true));
+
+      // Escape key
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+      // ── Scroll to zoom ──
+      lightbox.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        const delta = e.deltaY < 0 ? 1.15 : 0.87;
+        const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * delta));
+
+        // Zoom centered on cursor
+        const lbRect = lightbox.getBoundingClientRect();
+        const cx = e.clientX - lbRect.left - lbRect.width  / 2;
+        const cy = e.clientY - lbRect.top  - lbRect.height / 2;
+        tx = cx - (cx - tx) * (newScale / scale);
+        ty = cy - (cy - ty) * (newScale / scale);
+        scale = newScale;
+        if (scale === MIN_SCALE) { tx = 0; ty = 0; }
+        else clampTranslate();
+        applyTransform(false);
+      }, { passive: false });
+
+      // ── Mouse drag to pan ──
+      lbImg.addEventListener('mousedown', (e) => {
+        if (scale <= 1) return;
+        e.preventDefault();
+        dragging = true; lastX = e.clientX; lastY = e.clientY;
+        lbImg.style.transition = 'none';
+        lightbox.style.cursor = 'grabbing';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!dragging) return;
+        tx += e.clientX - lastX;
+        ty += e.clientY - lastY;
+        lastX = e.clientX; lastY = e.clientY;
+        clampTranslate();
+        lbImg.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (!dragging) return;
+        dragging = false;
+        lightbox.style.cursor = scale > 1 ? 'grab' : 'zoom-out';
+      });
+
+      // ── Touch: pinch to zoom + single-finger pan ──
+      lightbox.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+          e.preventDefault(); // block browser native pinch-zoom
+          pinchDist0 = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          pinchScale0 = scale;
+        } else if (e.touches.length === 1 && scale > 1) {
+          dragging = true;
+          lastX = e.touches[0].clientX;
+          lastY = e.touches[0].clientY;
+        }
+      }, { passive: false }); // passive:false required for preventDefault to work
+
+      lightbox.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        if (e.touches.length === 2) {
+          const dist = Math.hypot(
+            e.touches[0].clientX - e.touches[1].clientX,
+            e.touches[0].clientY - e.touches[1].clientY
+          );
+          scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, pinchScale0 * dist / pinchDist0));
+          if (scale === MIN_SCALE) { tx = 0; ty = 0; }
+          else clampTranslate();
+          applyTransform(false);
+        } else if (e.touches.length === 1 && dragging) {
+          tx += e.touches[0].clientX - lastX;
+          ty += e.touches[0].clientY - lastY;
+          lastX = e.touches[0].clientX;
+          lastY = e.touches[0].clientY;
+          clampTranslate();
+          lbImg.style.transform = `translate(${tx}px,${ty}px) scale(${scale})`;
+        }
+      }, { passive: false });
+
+      lightbox.addEventListener('touchend', () => { dragging = false; });
+    })();
+  </script>
+</body>
+</html>

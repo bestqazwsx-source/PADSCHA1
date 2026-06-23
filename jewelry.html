@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="th">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Padscha | Jewelry · เครื่องประดับ</title>
+  <meta name="description"
+    content="Padscha bespoke padparadscha jewelry — commission your own padparadscha piece with our Bangkok artisans." />
+  <meta name="theme-color" content="#fbf7ef" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Trirong:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Sarabun:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="products.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <!-- ═══ Header ═══ -->
+  <header class="site-header" id="top">
+    <div class="header-columns">
+      <!-- Column 1: Logo -->
+      <div class="header-col-logo">
+        <a href="index.html" aria-label="Padscha home">
+          <img src="cbe8af98-e6ec-4e5f-95b6-90097d7f90b6.jpg" alt="PADSCHA Gem Jewelry"
+            class="logo-img" />
+        </a>
+      </div>
+
+      <!-- Column 2: Banner Gems -->
+      <div class="header-col-gems">
+        <img src="{F6B3FF94-9238-4495-8586-AC527268C6E9}.png" alt="Padparadscha sapphires" class="header-col-bg" />
+        <div class="header-nav-overlay">
+          <a href="collection.html" class="nav-overlay-link" data-i18n="nav-collection">COLLECTION</a>
+        </div>
+      </div>
+
+      <!-- Column 3: Banner Jewelry -->
+      <div class="header-col-jewelry">
+        <img src="F87C3CF8-799B-480A-9CE3-8632C10771DF.png" alt="Padparadscha jewelry" class="header-col-bg" />
+        <div class="header-nav-overlay">
+          <a href="jewelry.html" class="nav-overlay-link" data-i18n="nav-bespoke">JEWELRY</a>
+        </div>
+        <!-- Language & Currency -->
+        <div class="header-lang">
+          <button class="lang-btn active" data-lang="th">TH</button>
+          <button class="lang-btn" data-lang="en">EN</button>
+          <div class="currency-divider"></div>
+          <select id="currencySelect" class="currency-select">
+            <option value="THB">฿ THB</option>
+            <option value="USD">$ USD</option>
+            <option value="EUR">€ EUR</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Mobile toggle -->
+      <button class="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+
+    <!-- Mobile navigation -->
+    <nav class="mobile-nav" id="mobileNav">
+      <a href="collection.html" data-i18n="nav-collection">COLLECTION</a>
+      <a href="jewelry.html" data-i18n="nav-bespoke">JEWELRY</a>
+      <div class="mobile-lang">
+        <button class="lang-btn active" data-lang="th">TH</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <select id="currencySelectMobile" class="currency-select currency-select-mobile">
+          <option value="THB">฿ THB</option>
+          <option value="USD">$ USD</option>
+          <option value="EUR">€ EUR</option>
+        </select>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- ═══ Jewelry / เครื่องประดับ Section ═══ -->
+    <section class="catalog-section active" id="catalog">
+      <div class="catalog-container">
+        <!-- Header -->
+        <div class="catalog-header reveal">
+          <div class="catalog-intro">
+            <p class="kicker">PADSCHA JEWELRY</p>
+            <h2 class="catalog-title" data-i18n="bespoke-h2">Commission your own padparadscha piece.</h2>
+            <p class="catalog-desc" data-i18n="bespoke-lead">
+              Choose the stone first, then work with our artisans to design a setting
+              that matches your vision. Every bespoke piece starts with the right gemstone.
+            </p>
+          </div>
+          <a class="btn btn-outline btn-round js-line-link" href="#" target="_blank" rel="noreferrer" data-i18n="catalog-btn-book">Book private viewing</a>
+        </div>
+
+        <!-- Filter / Sort controls -->
+        <div class="catalog-filters reveal delay-1">
+          <div class="filter-group">
+            <span class="filter-label" data-i18n="filter-label-category">CATEGORY</span>
+            <div class="filter-tabs" id="categoryFilter">
+              <button class="filter-tab" data-value="all" data-i18n="filter-tab-all-cat">All</button>
+              <button class="filter-tab" data-value="Padparadscha Sapphire" data-i18n="filter-tab-padparadscha">Padparadscha Sapphire</button>
+              <button class="filter-tab active" data-value="Jewelry" data-i18n="filter-tab-jewelry">เครื่องประดับ</button>
+            </div>
+          </div>
+
+          <div class="filter-group">
+            <span class="filter-label" data-i18n="filter-label-availability">AVAILABILITY</span>
+            <div class="filter-tabs" id="statusFilter">
+              <button class="filter-tab active" data-value="all" data-i18n="filter-tab-all-status">Current stones</button>
+              <button class="filter-tab" data-value="Available" data-i18n="filter-tab-available">Available</button>
+              <button class="filter-tab" data-value="Reserved" data-i18n="filter-tab-reserved">Reserved</button>
+            </div>
+          </div>
+
+          <div class="filter-group filter-sort">
+            <span class="filter-label" data-i18n="filter-label-sort">Sort</span>
+            <div class="select-wrap">
+              <select id="sortMode">
+                <option value="featured" data-i18n="sort-featured">Padscha edit</option>
+                <option value="available-first" data-i18n="sort-available-first">Available first</option>
+                <option value="carat-desc" data-i18n="sort-carat-desc">Carat high → low</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Count and Notice -->
+        <div class="catalog-count reveal delay-1">
+          <span id="stoneCount">Showing current items</span>
+          <span class="catalog-notice">
+            Every inquiry should begin with no-filter video, certificate detail, and treatment disclosure for that exact
+            piece.
+          </span>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="product-grid" id="productGrid" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ═══ Footer ═══ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <img src="cbe8af98-e6ec-4e5f-95b6-90097d7f90b6.jpg" alt="PADSCHA" class="footer-logo" />
+      <span>© <span id="year"></span> Padscha Gem & Jewelry · Bangkok</span>
+      <a href="index.html" class="back-top">Back to home ↑</a>
+    </div>
+  </footer>
+</body>
+
+</html>
